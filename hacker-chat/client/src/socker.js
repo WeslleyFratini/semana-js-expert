@@ -1,6 +1,7 @@
 export default class SocketClient {
   #serverConnection = {};
-  contructor({ host, port, protocol }) {
+
+  constructor({ host, port, protocol }) {
     this.host = host;
     this.port = port;
     this.protocol = protocol;
@@ -15,6 +16,7 @@ export default class SocketClient {
         Upgrade: "websocket",
       },
     };
+
     const http = await import(this.protocol);
     const req = http.request(options);
     req.end();
@@ -23,8 +25,9 @@ export default class SocketClient {
       req.once("upgrade", (res, socket) => resolve(socket));
     });
   }
+
   async initialize() {
-    this.#serverConnection = await this.#createConnection();
-    console.log("I connected to the server");
+    this.#serverConnection = await this.createConnection();
+    console.log("I connected to the server!!");
   }
 }

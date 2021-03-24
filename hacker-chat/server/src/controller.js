@@ -1,7 +1,7 @@
 export default class Controller {
   #users = new Map();
 
-  contructor({ socketServer }) {
+  constructor({ socketServer }) {
     this.socketServer = socketServer;
   }
   onNewConnection(socket) {
@@ -20,7 +20,6 @@ export default class Controller {
       console.log("onSocketClosed", data.toString());
     };
   }
-
   #onSocketData(id) {
     return (data) => {
       console.log("onSocketData", data.toString());
@@ -31,12 +30,12 @@ export default class Controller {
     const users = this.#users;
     const user = users.get(socketId) ?? {};
 
-    const updateUserData = {
+    const updatedUserData = {
       ...user,
       ...userData,
     };
 
-    users.set(socketId, updateUserData);
+    users.set(socketId, updatedUserData);
 
     return users.get(socketId);
   }

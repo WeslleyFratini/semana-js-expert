@@ -41,6 +41,9 @@ export default class TerminalController {
 
   #onLogChanged({ screen, activityLog }) {
     return (msg) => {
+      // weslleyfratini left
+      // weslleyfratini join
+
       const [userName] = msg.split(/\s/);
       const collor = this.#getUserCollor(userName);
       activityLog.addItem(`{${collor}}{bold}${msg.toString()}{/}`);
@@ -49,7 +52,9 @@ export default class TerminalController {
     };
   }
   #onStatusChanged({ screen, status }) {
+    // [ 'weslleyfratini', 'mariazinha']
     return (users) => {
+      // vamos pegar o primeiro elemento da lista
       const { content } = status.items.shift();
       status.clearItems();
       status.addItem(content);
