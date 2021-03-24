@@ -1,5 +1,7 @@
+import { constants } from "./constants.js";
 export default class Controller {
   #users = new Map();
+  #rooms = new Map();
 
   constructor({ socketServer }) {
     this.socketServer = socketServer;
@@ -15,14 +17,46 @@ export default class Controller {
     socket.on("end", this.#onSocketClosed(id));
   }
 
+  async joinRoom(socketId, data) {
+    const userData = data;
+    console.log(`${userData.username} joined ${[socketId]}`);
+    const user = this.#updateGlobalUserData(socketId, userData);
+
+    const { roomId } = userData;
+    const users = this.#joinUserOnRoom(roomId, user);
+
+    const currentUsers = Array.from(users.values()).map(({ id, userName }) => ({
+      username,
+      id,
+    }));
+
+    this.socketServer.sendMessage(
+      userData.socket,
+      constants.event.UPDATE_USERS
+    );
+  }
+
+  #joinUserOnRoom(roomId, user) {
+    const userOnRoom = this.#rooms.get(roomId) ?? new Map();
+    userOnRoom.set(user.id, user);
+    this.#rooms.set(roomId, userOnRoom);
+
+    return userOnRoom;
+  }
+
   #onSocketClosed(id) {
     return (data) => {
-      console.log("onSocketClosed", data.toString());
+      console.log("onSocketClosed", id);
     };
   }
   #onSocketData(id) {
     return (data) => {
-      console.log("onSocketData", data.toString());
+      try {
+        const { event, message } = JSON.parse(data);
+        this[event](id, message);
+      } catch (error) {
+        console.error("wrong event format!!", data.toString());
+      }
     };
   }
 

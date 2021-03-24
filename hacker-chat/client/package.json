@@ -1,13 +1,13 @@
 {
-  "name": "semana-expertJs",
+  "name": "client",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "user01": "node index.js --username weslleyfratini --room sala01 --hostUri http://localhost:9898 ",
-    "user02": "node index.js --username teste02 --room sala01 --hostUri http://localhost:9898 ",
-    "user03": "node index.js --username teste02 --room sala01 --hostUri http://localhost:9898alhost ",
+    "user01": "node index.js --username weslleyfratini --room sala01 --hostUri http://localhost:9898",
+    "user02": "node index.js --username teste02 --room sala01 --hostUri http://localhost:9898",
+    "user03": "node index.js --username teste03 --room sala01 --hostUri http://localhost:9898",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
