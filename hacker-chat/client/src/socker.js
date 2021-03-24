@@ -11,6 +11,14 @@ export default class SocketClient {
 
   sendMessage(event, message) {
     this.#serverConnection.WRITE(JSON.stringify({ event, message }));
+
+    this.#serverConnection.on("end", (data) => {
+      console.log("I disconnected!!!");
+    });
+
+    this.#serverConnection.on("error", (error) => {
+      console.log("DEU RUIM!!!", error);
+    });
   }
 
   attachEvents() {
