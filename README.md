@@ -1,25 +1,25 @@
-`Pré-requisitos`
+# Pré-requisitos
 
-`Instruções:`
+Instruções:
 
 # Clone este repositório
 
-$ git clone
+`$ git clone`
 
 # Abra o projeto com o VSCode
 
-$ code .
+`$ code .`
 
 # Acesse a pasta do projeto no terminal/hacker-chat/server
 
-$ cd hacker-chat
+`$ cd hacker-chat`
 
-$ cd server
+`$ cd server`
 
-$ npm start
+`$ npm start`
 
-$ cd ..
+`$ cd ..`
 
-$ cd client
+`$ cd client`
 
-$ npm run user01
+`$ npm run user01`
