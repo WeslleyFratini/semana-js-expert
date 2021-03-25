@@ -1,7 +1,5 @@
 # Pré-requisitos
 
-Instruções:
-
 # Clone este repositório
 
 `$ git clone`
