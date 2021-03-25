@@ -52,7 +52,6 @@ export default class TerminalController {
     };
   }
   #onStatusChanged({ screen, status }) {
-    // [ 'weslleyfratini', 'mariazinha']
     return (users) => {
       // vamos pegar o primeiro elemento da lista
       const { content } = status.items.shift();

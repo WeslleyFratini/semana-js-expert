@@ -1,4 +1,5 @@
-import Events from "events";
+import Event from "events";
+
 export default class SocketClient {
   #serverConnection = {};
   #serverListener = new Event();
@@ -10,32 +11,36 @@ export default class SocketClient {
   }
 
   sendMessage(event, message) {
-    this.#serverConnection.WRITE(JSON.stringify({ event, message }));
-
-    this.#serverConnection.on("end", (data) => {
-      console.log("I disconnected!!!");
-    });
-
-    this.#serverConnection.on("error", (error) => {
-      console.log("DEU RUIM!!!", error);
-    });
+    this.#serverConnection.write(JSON.stringify({ event, message }));
   }
 
-  attachEvents() {
+  attachEvents(events) {
     this.#serverConnection.on("data", (data) => {
       try {
         data
           .toString()
-          .split(`\n`)
+          .split("\n")
           .filter((line) => !!line)
           .map(JSON.parse)
           .map(({ event, message }) => {
             this.#serverListener.emit(event, message);
           });
       } catch (error) {
-        console.log("invalid", data.toString(), error);
+        console.log("invalid!", data.toString(), error);
       }
     });
+
+    this.#serverConnection.on("end", () => {
+      console.log("I disconnected!!");
+    });
+
+    this.#serverConnection.on("error", (error) => {
+      console.error("DEU RUIM", error);
+    });
+
+    for (const [key, value] of events) {
+      this.#serverListener.on(key, value);
+    }
   }
 
   async createConnection() {
