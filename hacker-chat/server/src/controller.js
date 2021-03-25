@@ -44,6 +44,7 @@ export default class Controller {
       roomId,
       message: { id: socketId, userName: userData.userName },
       event: constants.event.NEW_USER_CONNECTED,
+      includeCurrentSocket: true,
     });
   }
 
@@ -62,6 +63,18 @@ export default class Controller {
       this.socketServer.sendMessage(user.socket, event, message);
     }
   }
+
+  message(socketId, data) {
+    const { userName, roomId } = this.#users.get(socketId);
+
+    this.broadCast({
+      roomId,
+      socketId,
+      event: constants.event.MESSAGE,
+      message: { userName, message: data },
+    });
+  }
+
   #joinUserOnRoom(roomId, user) {
     const usersOnRoom = this.#rooms.get(roomId) ?? new Map();
     usersOnRoom.set(user.id, user);
@@ -70,9 +83,26 @@ export default class Controller {
     return usersOnRoom;
   }
 
+  #loggoutUser(id, roomId) {
+    this.#users.delete(id);
+    const userOnRoom = this.#rooms.get(roomId);
+    usersOnRoom.delete(id);
+
+    this.#rooms.set(roomId, userOnRoom);
+  }
+
   #onSocketClosed(id) {
     return (data) => {
-      console.log("onSocketClosed", id);
+      const { userName, roomId } = this.#users.get(id);
+      console.log(userName, "discconnect", id);
+      this.#loggoutUser(id, roomId);
+
+      this.broadCast({
+        roomId,
+        message: { id, userName },
+        socketId: id,
+        event: constants.event.DISCONNECT_USER,
+      });
     };
   }
   #onSocketData(id) {
